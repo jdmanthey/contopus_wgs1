@@ -11,6 +11,7 @@ mkdir 03_vcf
 mkdir 04_filtered_vcf
 mkdir 05_structure
 mkdir 06_window_stats
+mkdir 07_find_fixed_differences
 mkdir 10_filter
 mkdir 12_filter_vcf
 mkdir 20_satsuma
