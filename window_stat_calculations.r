@@ -10,9 +10,9 @@ heterozygosity <- function(xxx, popmap, outname, filename) {
 	options(scipen=999)
 	xxx <- xxx[nchar(xxx[,2]) == 1 & nchar(xxx[,3]) == 1, ]
 	for(a in 1:nrow(popmap)) {
-		output_rep <- c(popmap[a,1], "none", "heterozygosity", strsplit(filename, ":")[[1]][1], 
-			as.numeric(strsplit(strsplit(filename, ":")[[1]][2], "-")[[1]][1]),
-			as.numeric(strsplit(strsplit(filename, "-")[[1]][2], ".simple")[[1]][1]))
+		output_rep <- c(popmap[a,1], "none", "heterozygosity", strsplit(filename, "__")[[1]][1], 
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][2], "__")[[1]][1]),
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][3], ".simple")[[1]][1]))
 		# select this individual
 		a_rep <- xxx[,a+3]
 		# remove missing genotypes
@@ -113,50 +113,50 @@ pi_tajima_theta <- function(xxx, popname, outname, filename) {
 			Tajima_D <- ((pi * n_sites - theta * n_sites)) / sqrt(Var_d)
 			
 			# write output
-			output_rep1 <- c(popname, "none", "theta", strsplit(filename, ":")[[1]][1], 
-				as.numeric(strsplit(strsplit(filename, ":")[[1]][2], "-")[[1]][1]),
-				as.numeric(strsplit(strsplit(filename, "-")[[1]][2], ".simple")[[1]][1]),
+			output_rep1 <- c(popname, "none", "theta", strsplit(filename, "__")[[1]][1], 
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][2], "__")[[1]][1]),
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][3], ".simple")[[1]][1]),
 				n_sites, n_polymorphic, theta)
-			output_rep2 <- c(popname, "none", "pi", strsplit(filename, ":")[[1]][1], 
-				as.numeric(strsplit(strsplit(filename, ":")[[1]][2], "-")[[1]][1]),
-				as.numeric(strsplit(strsplit(filename, "-")[[1]][2], ".simple")[[1]][1]),
+			output_rep2 <- c(popname, "none", "pi", strsplit(filename, "__")[[1]][1], 
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][2], "__")[[1]][1]),
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][3], ".simple")[[1]][1]),
 				n_sites, n_polymorphic, pi)
-			output_rep3 <- c(popname, "none", "Tajima_D", strsplit(filename, ":")[[1]][1], 
-				as.numeric(strsplit(strsplit(filename, ":")[[1]][2], "-")[[1]][1]),
-				as.numeric(strsplit(strsplit(filename, "-")[[1]][2], ".simple")[[1]][1]),
+			output_rep3 <- c(popname, "none", "Tajima_D", strsplit(filename, "__")[[1]][1], 
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][2], "__")[[1]][1]),
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][3], ".simple")[[1]][1]),
 				n_sites, n_polymorphic, Tajima_D)
 			write(output_rep1, file=outname, append=T, ncolumns=9, sep="\t")
 			write(output_rep2, file=outname, append=T, ncolumns=9, sep="\t")
 			write(output_rep3, file=outname, append=T, ncolumns=9, sep="\t")
 		} else { # if no polymorphic sites retained
-			output_rep1 <- output_rep1 <- c(popname, "none", "theta", strsplit(filename, ":")[[1]][1], 
-				as.numeric(strsplit(strsplit(filename, ":")[[1]][2], "-")[[1]][1]),
-				as.numeric(strsplit(strsplit(filename, "-")[[1]][2], ".simple")[[1]][1]),
+			output_rep1 <- output_rep1 <- c(popname, "none", "theta", strsplit(filename, "__")[[1]][1], 
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][2], "__")[[1]][1]),
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][3], ".simple")[[1]][1]),
 				n_sites, n_polymorphic, "NA")
-			output_rep2 <- output_rep1 <- c(popname, "none", "pi", strsplit(filename, ":")[[1]][1], 
-				as.numeric(strsplit(strsplit(filename, ":")[[1]][2], "-")[[1]][1]),
-				as.numeric(strsplit(strsplit(filename, "-")[[1]][2], ".simple")[[1]][1]),
+			output_rep2 <- output_rep1 <- c(popname, "none", "pi", strsplit(filename, "__")[[1]][1], 
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][2], "__")[[1]][1]),
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][3], ".simple")[[1]][1]),
 				n_sites, n_polymorphic, "NA")
-			output_rep3 <- output_rep1 <- c(popname, "none", "Tajima_D", strsplit(filename, ":")[[1]][1], 
-				as.numeric(strsplit(strsplit(filename, ":")[[1]][2], "-")[[1]][1]),
-				as.numeric(strsplit(strsplit(filename, "-")[[1]][2], ".simple")[[1]][1]),
+			output_rep3 <- output_rep1 <- c(popname, "none", "Tajima_D", strsplit(filename, "__")[[1]][1], 
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][2], "__")[[1]][1]),
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][3], ".simple")[[1]][1]),
 				n_sites, n_polymorphic, "NA")
 			write(output_rep1, file=outname, append=T, ncolumns=9, sep="\t")
 			write(output_rep2, file=outname, append=T, ncolumns=9, sep="\t")
 			write(output_rep3, file=outname, append=T, ncolumns=9, sep="\t")
 		}
 	} else { # if no sites retained
-		output_rep1 <- output_rep1 <- c(popname, "none", "theta", strsplit(filename, ":")[[1]][1], 
-			as.numeric(strsplit(strsplit(filename, ":")[[1]][2], "-")[[1]][1]),
-			as.numeric(strsplit(strsplit(filename, "-")[[1]][2], ".simple")[[1]][1]),
+		output_rep1 <- output_rep1 <- c(popname, "none", "theta", strsplit(filename, "__")[[1]][1], 
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][2], "__")[[1]][1]),
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][3], ".simple")[[1]][1]),
 			n_sites, "NA", "NA")
-		output_rep2 <- output_rep1 <- c(popname, "none", "pi", strsplit(filename, ":")[[1]][1], 
-			as.numeric(strsplit(strsplit(filename, ":")[[1]][2], "-")[[1]][1]),
-			as.numeric(strsplit(strsplit(filename, "-")[[1]][2], ".simple")[[1]][1]),
+		output_rep2 <- output_rep1 <- c(popname, "none", "pi", strsplit(filename, "__")[[1]][1], 
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][2], "__")[[1]][1]),
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][3], ".simple")[[1]][1]),
 			n_sites, "NA", "NA")
-		output_rep3 <- output_rep1 <- c(popname, "none", "Tajima_D", strsplit(filename, ":")[[1]][1], 
-			as.numeric(strsplit(strsplit(filename, ":")[[1]][2], "-")[[1]][1]),
-			as.numeric(strsplit(strsplit(filename, "-")[[1]][2], ".simple")[[1]][1]),
+		output_rep3 <- output_rep1 <- c(popname, "none", "Tajima_D", strsplit(filename, "__")[[1]][1], 
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][2], "__")[[1]][1]),
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][3], ".simple")[[1]][1]),
 			n_sites, "NA", "NA")
 		write(output_rep1, file=outname, append=T, ncolumns=9, sep="\t")
 		write(output_rep2, file=outname, append=T, ncolumns=9, sep="\t")
@@ -277,13 +277,13 @@ differentiation <- function(xxx1, xxx2, popname1, popname2, outname, filename) {
 	fst_all <- sum(unlist(numerator_all)) / sum(unlist(denominator_all))
 	
 	# write to output for dxy and fst
-	output_rep1 <- c(popname1, popname2, "Dxy", strsplit(filename, ":")[[1]][1], 
-				as.numeric(strsplit(strsplit(filename, ":")[[1]][2], "-")[[1]][1]),
-				as.numeric(strsplit(strsplit(filename, "-")[[1]][2], ".simple")[[1]][1]),
+	output_rep1 <- c(popname1, popname2, "Dxy", strsplit(filename, "__")[[1]][1], 
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][2], "__")[[1]][1]),
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][3], ".simple")[[1]][1]),
 				n_sites, n_variant_sites, dxy_all)
-	output_rep2 <- c(popname1, popname2, "Fst", strsplit(filename, ":")[[1]][1], 
-				as.numeric(strsplit(strsplit(filename, ":")[[1]][2], "-")[[1]][1]),
-				as.numeric(strsplit(strsplit(filename, "-")[[1]][2], ".simple")[[1]][1]),
+	output_rep2 <- c(popname1, popname2, "Fst", strsplit(filename, "__")[[1]][1], 
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][2], "__")[[1]][1]),
+			as.numeric(strsplit(strsplit(filename, "__")[[1]][3], ".simple")[[1]][1]),
 				n_sites, n_variant_sites, fst_all)
 	write(output_rep1, file=outname, append=T, ncolumns=9, sep="\t")
 	write(output_rep2, file=outname, append=T, ncolumns=9, sep="\t")
