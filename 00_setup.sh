@@ -5,6 +5,7 @@ workdir=/lustre/scratch/jmanthey/15_contopus
 cd ${workdir}
 
 mkdir 00_fastq
+mkdir 01_cleaned
 mkdir 01_bam_files
 mkdir 02_vcf
 mkdir 03_vcf
