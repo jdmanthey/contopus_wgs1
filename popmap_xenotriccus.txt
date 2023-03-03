@@ -1,0 +1,11 @@
+Xenotriccus_callizonus_XISTH_100098	1
+Xenotriccus_callizonus_XISTH_100111	2
+Xenotriccus_callizonus_XISTH_113416	3
+Xenotriccus_callizonus_XISTH_99654	4
+Xenotriccus_callizonus_XISTH_99835	5
+Xenotriccus_callizonus_XISTH_99849	6
+Xenotriccus_callizonus_XISTH_99850	7
+Xenotriccus_callizonus_XISTH_99925	8
+Xenotriccus_mexicanus_SMS_ALTBAL023	9
+Xenotriccus_mexicanus_SMS_ALTBAL204	10
+Xenotriccus_mexicanus_SMS_CPM333	11
