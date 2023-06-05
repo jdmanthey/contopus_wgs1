@@ -17,4 +17,6 @@ mkdir 08_relernn
 mkdir 09_demography
 mkdir 10_filter
 mkdir 12_filter_vcf
+mkdir 14_50kbp_admixture
+mkdir 14_50kbp_admixture/windows
 mkdir 20_satsuma
