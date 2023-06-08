@@ -61,6 +61,11 @@ samtools index ${workdir}/01_bam_files/${basename_array}_final.bam
 # run bcftools
 bcftools mpileup --skip-indels -C 0 -d 250 --threads 34 -Ou -f ${refgenome} ${workdir}/01_bam_files/${basename_array}_final.bam | bcftools call -m -Ov -o ${workdir}/02_vcf/${basename_array}.vcf
 
+# bgzip
+bgzip ${workdir}/02_vcf/${basename_array}.vcf
+
+#tabix
+tabix ${workdir}/02_vcf/${basename_array}.vcf.gz
 
 
 
