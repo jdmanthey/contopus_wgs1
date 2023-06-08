@@ -36,6 +36,6 @@ keep <- unlist(keep)
 x3 <- x2[x2[,9] %in% keep, ]
 
 # write the cds to file
-write.table(x2, file="manakin_cds_subset.gff", sep="\t", row.names=F, col.names=F, quote=F)
+write.table(x3, file="manakin_cds_subset.gff", sep="\t", row.names=F, col.names=F, quote=F)
 
 
