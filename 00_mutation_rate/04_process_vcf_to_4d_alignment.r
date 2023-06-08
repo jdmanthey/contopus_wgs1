@@ -230,6 +230,7 @@ for(a in 1:length(seq_names)) {
 }
 # total of X sites
 
+# write fasta
 output_name <- "_total_4d_sites.fasta"
 for(a in 1:length(seq_names)) {
 	if(a == 1) {
@@ -241,6 +242,24 @@ for(a in 1:length(seq_names)) {
 }
 
 
+# write nexus
+output_name <- "_total_4d_sites.nex"
+out_string <- "#NEXUS"
+write(out_string, file=output_name)
+out_string <- "begin data;"
+write(out_string, file=output_name, append=T)
+out_string <- paste0("dimensions ntax=", length(seq_names), " nchar=", nchar(seqs[[1]]), ";")
+write(out_string, file=output_name, append=T)
+out_string <- "format datatype=nucleotide;"
+write(out_string, file=output_name, append=T)
+out_string <- "matrix"
+write(out_string, file=output_name, append=T)
+for(a in 1:length(seq_names)) {
+	out_string <- paste(substr(seq_names[[a]], 2, nchar(seq_names[[a]])), seqs[[a]], sep="\t")
+	write(out_string, file=output_name, append=T)
+}
+out_string <- "end;"
+write(out_string, file=output_name, append=T)
 
 
 
