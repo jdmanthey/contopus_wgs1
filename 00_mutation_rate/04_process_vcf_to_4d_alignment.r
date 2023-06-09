@@ -24,8 +24,8 @@ reference_name <- "Chiroxiphia"
 # keep only invariant and biallelic sites
 vcf <- vcf[nchar(vcf[,4]) == 1, ]
 
-# define unique cds in gff file
-cds <- unique(gff[,9])
+# unique chromosomes
+chromosomes <- unique(gff[,1])
 
 ###############################
 ###############################
@@ -39,99 +39,111 @@ cds <- unique(gff[,9])
 ###############################
 ###############################
 
-for(a in 1:length(cds)) {
-	if(a %% 100 == 0) {print(a)} # progress
-	# subset gff
-	a_gff <- gff[gff[,9] == cds[a],]
-	# keep going if the CDS is divisible by 3 (codon length and full)
-	if(sum(a_gff[,5] - a_gff[,4] + 1) %% 3 == 0) {
-		# filter vcf for this cds
-		a_vcf <- list()
-		for(b in 1:nrow(a_gff)) {
-			a_vcf[[b]] <- vcf[vcf[,1] == a_gff[b,1] & vcf[,2] >= a_gff[b,4] & vcf[,2] <= a_gff[b,5],]
-		}
-		a_vcf <- do.call("rbind", a_vcf)
-		
-		# check if the nrow of this subset is at least 95% the total length of the cds
-		if(nrow(a_vcf) >= (0.95 * sum(a_gff[,5] - a_gff[,4] + 1))) {
-			# determine which sites are missing and fill them in with N
-			cds_positions <- c()
+# loop for each chromosome
+count <- 1
+for(d in 1:length(chromosomes)) {
+	# gff and vcf for this chromosome
+	d_gff <- gff[gff[,1] == chromosomes[d],]
+	d_vcf <- vcf[vcf[,1] == chromosomes[d],]
+	
+	# define unique cds in gff file for this chromosome
+	cds <- unique(d_gff[,9])
+	
+	for(a in 1:length(cds)) {
+		if(count %% 100 == 0) {print(count)} # progress
+		# subset gff
+		a_gff <- d_gff[d_gff[,9] == cds[a],]
+		# keep going if the CDS is divisible by 3 (codon length and full)
+		if(sum(a_gff[,5] - a_gff[,4] + 1) %% 3 == 0) {
+			# filter vcf for this cds
+			a_vcf <- list()
 			for(b in 1:nrow(a_gff)) {
-				cds_positions <- c(cds_positions, seq(from=a_gff[b,4], to=a_gff[b,5], by=1))
+				a_vcf[[b]] <- d_vcf[d_vcf[,1] == a_gff[b,1] & d_vcf[,2] >= a_gff[b,4] & d_vcf[,2] <= a_gff[b,5],]
 			}
-			cds_missing <- cds_positions[cds_positions %in% a_vcf[,2] == FALSE]
-			if(length(cds_missing) > 0) {
-				for(b in 1:length(cds_missing)) {
-					a_vcf <- rbind(a_vcf, c(a_vcf[1,1], cds_missing[b], "N", ".", rep("0/0", n_inds)))
+			a_vcf <- do.call("rbind", a_vcf)
+			
+			# check if the nrow of this subset is at least 95% the total length of the cds
+			if(nrow(a_vcf) >= (0.95 * sum(a_gff[,5] - a_gff[,4] + 1))) {
+				# determine which sites are missing and fill them in with N
+				cds_positions <- c()
+				for(b in 1:nrow(a_gff)) {
+					cds_positions <- c(cds_positions, seq(from=a_gff[b,4], to=a_gff[b,5], by=1))
 				}
-			}
-			
-			# order the matrix in the correct order based on orientation of the cds (and rename rownames in order)
-			a_vcf[,2] <- as.numeric(a_vcf[,2])
-			if(a_gff[1,7] == "+") {
-				a_vcf <- a_vcf[order(a_vcf[,2], decreasing=F),]
-			} else {
-				a_vcf <- a_vcf[order(a_vcf[,2], decreasing=T),]
-			}
-			rownames(a_vcf) <- seq(from=1, to=nrow(a_vcf), by=1)
-			
-			# randomly select alleles for heterozygotes
-			for(b in 5:ncol(a_vcf)) {
-				b_hets <- sample(c("0/0", "1/1"), length(a_vcf[a_vcf[,b] == "0/1",b]), replace=T)
-				a_vcf[a_vcf[,b] == "0/1",b] <- b_hets
-			}
-			
-			# determine alleles for each site
-			allele_1 <- a_vcf[,3]
-			allele_2 <- a_vcf[,4]
-			# complement the alleles if the cds is in reverse orientation
-			if(a_gff[1,7] == "-") {
-				allele_1 <- gsub("A", 1, allele_1)
-				allele_1 <- gsub("C", 2, allele_1)
-				allele_1 <- gsub("G", 3, allele_1)
-				allele_1 <- gsub("T", 4, allele_1)
-				allele_1 <- gsub(1, "T", allele_1)
-				allele_1 <- gsub(2, "G", allele_1)
-				allele_1 <- gsub(3, "C", allele_1)
-				allele_1 <- gsub(4, "A", allele_1)
-				allele_2 <- gsub("A", 1, allele_2)
-				allele_2 <- gsub("C", 2, allele_2)
-				allele_2 <- gsub("G", 3, allele_2)
-				allele_2 <- gsub("T", 4, allele_2)
-				allele_2 <- gsub(1, "T", allele_2)
-				allele_2 <- gsub(2, "G", allele_2)
-				allele_2 <- gsub(3, "C", allele_2)
-				allele_2 <- gsub(4, "A", allele_2)
-			}
-			
-			# get the sequences for each individual
-			a_genotypes <- a_vcf[,5:ncol(a_vcf)]
-			seq_names <- list()
-			seqs <- list()
-			for(b in 1:n_inds) {
-				b_rep <- a_genotypes[,b]
-				b_rep[b_rep == "0/0"] <- allele_1[b_rep == "0/0"]
-				b_rep[b_rep == "1/1"] <- allele_2[b_rep == "1/1"]
-				seqs[[b]] <- paste0(b_rep, collapse="")
-				seq_names[[b]] <- paste0(">", colnames(a_genotypes)[b])
-			}
-			# add the reference genome info
-			b <- b + 1
-			seqs[[b]] <- paste0(allele_1, collapse="")
-			seq_names[[b]] <- paste0(">", reference_name)
-			
-			# write the fasta file to the temporary directory
-			out_name <- paste0(temp_dir, "/", a, ".fasta")
-			for(b in 1:(n_inds + 1)) {
-				if(b == 1) {
-					write(seq_names[[b]], out_name)
+				cds_missing <- cds_positions[cds_positions %in% a_vcf[,2] == FALSE]
+				if(length(cds_missing) > 0) {
+					for(b in 1:length(cds_missing)) {
+						a_vcf <- rbind(a_vcf, c(a_vcf[1,1], cds_missing[b], "N", ".", rep("0/0", n_inds)))
+					}
+				}
+				
+				# order the matrix in the correct order based on orientation of the cds (and rename rownames in order)
+				a_vcf[,2] <- as.numeric(a_vcf[,2])
+				if(a_gff[1,7] == "+") {
+					a_vcf <- a_vcf[order(a_vcf[,2], decreasing=F),]
 				} else {
-					write(seq_names[[b]], out_name, append=T)
+					a_vcf <- a_vcf[order(a_vcf[,2], decreasing=T),]
 				}
-				write(seqs[[b]], out_name, append=T)
-			}		
-		}
-	}  
+				rownames(a_vcf) <- seq(from=1, to=nrow(a_vcf), by=1)
+				
+				# randomly select alleles for heterozygotes
+				for(b in 5:ncol(a_vcf)) {
+					b_hets <- sample(c("0/0", "1/1"), length(a_vcf[a_vcf[,b] == "0/1",b]), replace=T)
+					a_vcf[a_vcf[,b] == "0/1",b] <- b_hets
+				}
+				
+				# determine alleles for each site
+				allele_1 <- a_vcf[,3]
+				allele_2 <- a_vcf[,4]
+				# complement the alleles if the cds is in reverse orientation
+				if(a_gff[1,7] == "-") {
+					allele_1 <- gsub("A", 1, allele_1)
+					allele_1 <- gsub("C", 2, allele_1)
+					allele_1 <- gsub("G", 3, allele_1)
+					allele_1 <- gsub("T", 4, allele_1)
+					allele_1 <- gsub(1, "T", allele_1)
+					allele_1 <- gsub(2, "G", allele_1)
+					allele_1 <- gsub(3, "C", allele_1)
+					allele_1 <- gsub(4, "A", allele_1)
+					allele_2 <- gsub("A", 1, allele_2)
+					allele_2 <- gsub("C", 2, allele_2)
+					allele_2 <- gsub("G", 3, allele_2)
+					allele_2 <- gsub("T", 4, allele_2)
+					allele_2 <- gsub(1, "T", allele_2)
+					allele_2 <- gsub(2, "G", allele_2)
+					allele_2 <- gsub(3, "C", allele_2)
+					allele_2 <- gsub(4, "A", allele_2)
+				}
+				
+				# get the sequences for each individual
+				a_genotypes <- a_vcf[,5:ncol(a_vcf)]
+				seq_names <- list()
+				seqs <- list()
+				for(b in 1:n_inds) {
+					b_rep <- a_genotypes[,b]
+					b_rep[b_rep == "0/0"] <- allele_1[b_rep == "0/0"]
+					b_rep[b_rep == "1/1"] <- allele_2[b_rep == "1/1"]
+					seqs[[b]] <- paste0(b_rep, collapse="")
+					seq_names[[b]] <- paste0(">", colnames(a_genotypes)[b])
+				}
+				# add the reference genome info
+				b <- b + 1
+				seqs[[b]] <- paste0(allele_1, collapse="")
+				seq_names[[b]] <- paste0(">", reference_name)
+				
+				# write the fasta file to the temporary directory
+				out_name <- paste0(temp_dir, "/", count, ".fasta")
+				count <- count + 1
+				for(b in 1:(n_inds + 1)) {
+					if(b == 1) {
+						write(seq_names[[b]], out_name)
+					} else {
+						write(seq_names[[b]], out_name, append=T)
+					}
+					write(seqs[[b]], out_name, append=T)
+				}		
+			}
+		}  
+	}
 }
 
 ###############################
@@ -241,7 +253,6 @@ for(a in 1:length(seq_names)) {
 	write(seqs[[a]], output_name, append=T)
 }
 
-
 # write nexus
 output_name <- "_total_4d_sites.nex"
 out_string <- "#NEXUS"
@@ -260,7 +271,6 @@ for(a in 1:length(seq_names)) {
 }
 out_string <- "end;"
 write(out_string, file=output_name, append=T)
-
 
 
 
