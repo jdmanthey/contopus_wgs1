@@ -45,29 +45,4 @@ vcftools --vcf ${workdir}/04_filtered_vcf/${input_array}.filtered.vcf --keep eas
 vcftools --vcf ${workdir}/04_filtered_vcf/${input_array}.filtered.vcf --keep western.txt --max-missing 0.9 --minGQ 20 --minDP 6 --max-meanDP 50 --min-alleles 2 --max-alleles 2 --max-maf 0.49 --remove-indels --recode --recode-INFO-all --out ${workdir}/08_relernn/${input_array}_western
 
 
-# per species no missing for stairway plots (only biallelic and invariant)
-# run twice to get the invariant counts
-# variant
-#eastern
-vcftools --vcf ${workdir}/04_filtered_vcf/${input_array}.filtered.vcf --keep eastern.txt --max-missing 1.0 --minGQ 20 --minDP 6 --max-meanDP 50 --min-alleles 2 --max-alleles 2 --max-maf 0.49 --remove-indels --recode --recode-INFO-all --out ${workdir}/09_demography/${input_array}_eastern_variant
-#western
-vcftools --vcf ${workdir}/04_filtered_vcf/${input_array}.filtered.vcf --keep western.txt --max-missing 1.0 --minGQ 20 --minDP 6 --max-meanDP 50 --min-alleles 2 --max-alleles 2 --max-maf 0.49 --remove-indels --recode --recode-INFO-all --out ${workdir}/09_demography/${input_array}_western_variant
-# variant plus invariant
-#eastern
-vcftools --vcf ${workdir}/04_filtered_vcf/${input_array}.filtered.vcf --keep eastern.txt --max-missing 1.0 --minGQ 20 --minDP 6 --max-meanDP 50 --max-alleles 2 --max-maf 0.49 --remove-indels --recode --recode-INFO-all --out ${workdir}/09_demography/${input_array}_eastern_all
-#western
-vcftools --vcf ${workdir}/04_filtered_vcf/${input_array}.filtered.vcf --keep western.txt --max-missing 1.0 --minGQ 20 --minDP 6 --max-meanDP 50 --max-alleles 2 --max-maf 0.49 --remove-indels --recode --recode-INFO-all --out ${workdir}/09_demography/${input_array}_western_all
-
-
-# two species (only non-admixed individuals) for fastsimcoal (only biallelic and invariant)
-# run twice to get the invariant counts
-# variant
-vcftools --vcf ${workdir}/04_filtered_vcf/${input_array}.filtered.vcf --keep nonadmixed.txt --max-missing 1.0 --minGQ 20 --minDP 6 --max-meanDP 50 --min-alleles 2 --max-alleles 2 --max-maf 0.49 --remove-indels --recode --recode-INFO-all --out ${workdir}/09_demography/${input_array}_nonadmixed_variant
-# variant plus invariant
-vcftools --vcf ${workdir}/04_filtered_vcf/${input_array}.filtered.vcf --keep nonadmixed.txt --max-missing 1.0 --minGQ 20 --minDP 6 --max-meanDP 50 --max-alleles 2 --max-maf 0.49 --remove-indels --recode --recode-INFO-all --out ${workdir}/09_demography/${input_array}_nonadmixed_all
-
-
-
-
-
 
