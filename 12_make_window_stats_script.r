@@ -9,7 +9,7 @@
 	ref_index <- read.table("flycatcher_rearranged.fa.fai", stringsAsFactors=F)
 	
 	# define window size
-	window_size <- 100000
+	window_size <- 50000
 	
 	# make directories
 	dir.create(directory_name)
