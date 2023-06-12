@@ -1,6 +1,6 @@
 	options(scipen=999)
 	project_directory <- "/lustre/scratch/jmanthey/15_contopus/06_window_stats"
-	directory_name <- "13_100kbp_stats"
+	directory_name <- "13_50kbp_stats"
 	cluster <- "quanah"
 	max_number_jobs <- 200
 	
@@ -62,7 +62,7 @@
 	write(tree_helper3, file=paste(directory_name, "/tree_helper_end.txt", sep=""), ncolumns=1)
 
 	# write the array script
-	a.script <- paste(directory_name, "/stat100kbp_array.sh", sep="")
+	a.script <- paste(directory_name, "/stat50kbp_array.sh", sep="")
 	write("#!/bin/sh", file=a.script)
 	write("#SBATCH --chdir=./", file=a.script, append=T)
 	write(paste("#SBATCH --job-name=", "phylo", sep=""), file=a.script, append=T)
