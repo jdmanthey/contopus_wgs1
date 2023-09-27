@@ -40,9 +40,9 @@ bcftools query -f '%CHROM\t%POS\t%REF\t%ALT[\t%GT]\n ' ${workdir}/07_find_fixed_
 
 # per species up to one missing individual for recombination rate (only biallelic)
 #eastern
-vcftools --vcf ${workdir}/04_filtered_vcf/${input_array}.filtered.vcf --keep eastern.txt --max-missing 0.9 --minGQ 20 --minDP 6 --max-meanDP 50 --min-alleles 2 --max-alleles 2 --max-maf 0.49 --remove-indels --recode --recode-INFO-all --out ${workdir}/08_relernn/${input_array}_eastern
+vcftools --vcf ${workdir}/04_filtered_vcf/${input_array}.filtered.vcf --keep eastern.txt --max-missing 0.9 --minGQ 20 --minDP 6 --max-meanDP 50 --min-alleles 2 --max-alleles 2 --max-maf 0.49 --remove-indels --recode --recode-INFO-all --out ${workdir}/08_ldhat/${input_array}_eastern
 #western
-vcftools --vcf ${workdir}/04_filtered_vcf/${input_array}.filtered.vcf --keep western.txt --max-missing 0.9 --minGQ 20 --minDP 6 --max-meanDP 50 --min-alleles 2 --max-alleles 2 --max-maf 0.49 --remove-indels --recode --recode-INFO-all --out ${workdir}/08_relernn/${input_array}_western
+vcftools --vcf ${workdir}/04_filtered_vcf/${input_array}.filtered.vcf --keep western.txt --max-missing 0.9 --minGQ 20 --minDP 6 --max-meanDP 50 --min-alleles 2 --max-alleles 2 --max-maf 0.49 --remove-indels --recode --recode-INFO-all --out ${workdir}/08_ldhat/${input_array}_western
 
 
 
