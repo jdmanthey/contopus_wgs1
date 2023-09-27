@@ -16,3 +16,8 @@ tabix -p vcf eastern_ldhat.vcf.gz
 bgzip western_ldhat.vcf
 #tabix
 tabix -p vcf western_ldhat.vcf.gz
+
+# make header files
+gunzip -cd eastern_ldhat.vcf.gz | head -n100000 | grep "#" > eastern_header.txt
+gunzip -cd western_ldhat.vcf.gz | head -n100000 | grep "#" > western_header.txt
+
