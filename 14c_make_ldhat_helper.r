@@ -21,7 +21,7 @@
 	helper4 <- list() # end
 	counter <- 1
 	for(a in 1:nrow(ref_index)) {
-		a_start <- 0
+		a_start <- 1
 		a_end <- window_size
 		a_max <- ref_index[a,2]
 		a_chromosome <- ref_index[a,1]
@@ -51,7 +51,7 @@
 				
 				counter <- counter + 1
 			} else if(b == 1) {
-				a_start <- 0
+				a_start <- 1
 				a_end <- window_size
 				
 				helper1[[counter]] <- counter
@@ -62,7 +62,7 @@
 				counter <- counter + 1
 			} else {
 				a_start <- a_start + window_size - overlap
-				a_end <- a_start + window_size
+				a_end <- a_start + window_size - 1
 				
 				helper1[[counter]] <- counter
 				helper2[[counter]] <- a_chromosome
