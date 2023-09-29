@@ -40,7 +40,7 @@
 		
 		# loop for defining helper info for each window
 		for(b in 1:a_windows) {
-			if(b == a_windows) {
+			if(b == a_windows & b != 1) {
 				a_start <- a_start + window_size - overlap
 				a_end <- a_max
 				
@@ -50,9 +50,19 @@
 				helper4[[counter]] <- a_end
 				
 				counter <- counter + 1
-			} else if(b == 1) {
+			} else if(b == 1 & b != a_windows) {
 				a_start <- 1
 				a_end <- window_size
+				
+				helper1[[counter]] <- counter
+				helper2[[counter]] <- a_chromosome
+				helper3[[counter]] <- a_start
+				helper4[[counter]] <- a_end
+				
+				counter <- counter + 1
+			} else if(b == 1 & b == a_windows) {
+				a_start <- 1
+				a_end <- a_max
 				
 				helper1[[counter]] <- counter
 				helper2[[counter]] <- a_chromosome
