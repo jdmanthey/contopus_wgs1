@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --chdir=./
-#SBATCH --job-name=stats
+#SBATCH --job-name=ldhat
 #SBATCH --nodes=1 --ntasks=2
 #SBATCH --partition quanah
 #SBATCH --time=48:00:00
