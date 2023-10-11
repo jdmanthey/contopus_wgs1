@@ -30,7 +30,7 @@ grep -v "#" variant_2pop.vcf | wc -l	# 6329302
 # number of invariant sites (if needed to manually fill for FSC2 SFS):
 # 2pop: 240591606 - 8702513 = 231889093
 # eastern: 240591606 - 4528955 = 236062651
-# western: 240591606 - 6329302 = 234262304
+# western: 240591606 - 3311371 = 237280235
 
 # use at least 60GB RAM
 
