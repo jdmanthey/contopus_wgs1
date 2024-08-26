@@ -1,7 +1,6 @@
 # contopus_wgs1
-divergence history of two contopus species and characterization of a few hybrids
 
-Descriptions of scripts to reproduce whole genome sequencing analyses of wood-pewees in Nebraska.
+Descriptions of scripts to reproduce whole genome sequencing analyses of wood-pewees in Nebraska:
 
 00_setup.sh – prep directories
 
